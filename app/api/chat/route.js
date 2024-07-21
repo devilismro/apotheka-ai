@@ -1,20 +1,11 @@
 import { Configuration, OpenAIApi } from "openai-edge";
 import { OpenAIStream, StreamingTextResponse } from "ai";
 
+
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
 console.log("API key set!");
 export const runtime = "edge";
-
-const medicalKeywords = [
-  "medicament", "tratament", "boală", "simptom", "doctor", "farmacie", 
-  "supliment", "sănătate", "diagnostic", "terapie", "consultație", "rețetă",
-  // Add more medical-related keywords as needed
-];
-
-const isMedicalQuery = (query) => {
-  return medicalKeywords.some((keyword) => query.toLowerCase().includes(keyword));
-};
 
 export async function POST(req) {
   const apiKey = OPENAI_API_KEY;
@@ -25,7 +16,7 @@ export async function POST(req) {
       {
         status: 500,
         headers: { "Content-Type": "application/json" },
-      }
+      } 
     );
   }
 
@@ -36,21 +27,6 @@ export async function POST(req) {
 
   try {
     const { messages } = await req.json();
-    const userMessage = messages[messages.length - 1].content;
-
-    if (!isMedicalQuery(userMessage)) {
-      return new Response(
-        JSON.stringify({
-          role: "assistant",
-          content: "Imi pare rau, dar sunt asistent virtual care nu are alte cunostinte decat medicale. Va rog sa-mi adresati strict doar intrebari din domeniul medical sau farmaceutic. Multumesc!",
-          id: generateId(),
-        }),
-        {
-          status: 200,
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-    }
 
     const response = await openai.createChatCompletion({
       model: "gpt-4o",
