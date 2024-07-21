@@ -15,41 +15,52 @@ import {
 } from "@/components/ui/card";
 import { Send, Bot, User, Sun, Moon, LogOut } from "lucide-react";
 import { generateId } from "ai";
+import ReactMarkdown from "react-markdown";
+
 
 interface ChatMessageProps {
   message: Message;
 }
 
-const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => (
-  <div
-    className={`flex ${
-      message.role === "assistant" ? "justify-start" : "justify-end"
-    } mb-4`}
-  >
-    <div
-      className={`flex items-start max-w-[100%] ${
-        message.role === "assistant" ? "flex-row" : "flex-row-reverse"
+const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
+  const isAssistant = message.role === "assistant";
+  const formattedMessage = (
+    <ReactMarkdown
+      className={`prose dark:prose-dark ${
+        isAssistant ? "text-gray-800 dark:text-white" : "text-white"
       }`}
     >
+      {message.content}
+    </ReactMarkdown>
+  );
+
+  return (
+    <div className={`flex ${isAssistant ? "justify-start" : "justify-end"} mb-4`}>
       <div
-        className={`rounded-full p-2 ${
-          message.role === "assistant" ? "bg-green-500" : "bg-blue-500"
-        } text-white shadow-lg`}
-      >
-        {message.role === "assistant" ? <Bot size={24} /> : <User size={24} />}
-      </div>
-      <div
-        className={`mx-3 px-4 py-2 rounded-lg shadow-md ${
-          message.role === "assistant"
-            ? "bg-white text-gray-800 dark:bg-gray-700 dark:text-white"
-            : "bg-blue-500 text-white"
+        className={`flex items-start max-w-[100%] ${
+          isAssistant ? "flex-row" : "flex-row-reverse"
         }`}
       >
-        {message.content}
+        <div
+          className={`rounded-full p-2 ${
+            isAssistant ? "bg-green-500" : "bg-blue-500"
+          } text-white shadow-lg`}
+        >
+          {isAssistant ? <Bot size={24} /> : <User size={24} />}
+        </div>
+        <div
+          className={`mx-3 px-4 py-2 rounded-lg shadow-md ${
+            isAssistant
+              ? "bg-white text-gray-800 dark:bg-gray-700 dark:text-white"
+              : "bg-blue-500 text-white"
+          }`}
+        >
+          {formattedMessage}
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 const ApothekaAIAssistant: React.FC = () => {
   const router = useRouter(); 
