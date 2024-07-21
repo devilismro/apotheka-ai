@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/card";
 import { Send, Bot, User, Sun, Moon, LogOut } from "lucide-react";
 import { generateId } from "ai";
+import ReactMarkdown from 'react-markdown';
 
 interface ChatMessageProps {
   message: Message;
@@ -45,7 +46,13 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => (
             : "bg-blue-500 text-white"
         }`}
       >
-        {message.content}
+        <ReactMarkdown
+          className={`prose dark:prose-dark ${
+            message.role === "assistant" ? "text-gray-800 dark:text-white" : "text-white"
+          }`}
+        >
+          {message.content}
+        </ReactMarkdown>
       </div>
     </div>
   </div>
