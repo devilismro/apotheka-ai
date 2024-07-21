@@ -71,7 +71,7 @@ export async function POST(req) {
       };
 
       return new Response(
-        JSON.stringify({ role: "assistant", messages: [...messages, nonMedicalResponse] }),
+        JSON.stringify({ messages: [...messages, nonMedicalResponse] }),
         {
           status: 200,
           headers: { "Content-Type": "application/json" },
