@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useChat, Message } from "ai/react";
-import { useRouter } from "next/navigation"; // Use next/navigation instead of next/router
+import { useRouter } from "next/navigation"; 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -52,7 +52,7 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => (
 );
 
 const ApothekaAIAssistant: React.FC = () => {
-  const router = useRouter(); // Correctly using useRouter from next/navigation
+  const router = useRouter(); 
   const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
 
   const {

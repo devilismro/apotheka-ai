@@ -70,19 +70,19 @@ export async function POST(req) {
         content: "Imi pare rau, dar sunt asistent virtual care nu are alte cunostinte decat medicale. Va rog sa-mi adresati strict doar intrebari din domeniul medical sau farmaceutic. Multumesc!",
       };
 
-      const updatedMessages = [...messages, nonMedicalResponse];
-
-      return new Response(
-        JSON.stringify({ messages: updatedMessages }),
-        {
-          status: 200,
-          headers: { "Content-Type": "application/json" },
+      const stream = new ReadableStream({
+        start(controller) {
+          controller.enqueue('data: ' + JSON.stringify({ choices: [{ delta: { content: nonMedicalResponse.content } }] }) + '\n\n');
+          controller.enqueue('data: [DONE]\n\n');
+          controller.close();
         }
-      );
+      });
+
+      return new StreamingTextResponse(stream);
     }
 
     const response = await openai.createChatCompletion({
-      model: "gpt-4",
+      model: "gpt-4o",
       stream: true,
       messages: [
         {
