@@ -98,28 +98,19 @@ const ApothekaAIAssistant: React.FC = () => {
       });
   
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error("Network response was not ok");
       }
   
-      const contentType = response.headers.get("content-type");
-      if (contentType && contentType.indexOf("application/json") !== -1) {
-        const data = await response.json();
-        if (data.nonMedicalResponse) {
-          const newAssistantMessage: Message = { role: "assistant", content: data.nonMedicalResponse, id: generateId() };
-          setMessages([...messages, newUserMessage, newAssistantMessage]);
-        }
+      const data = await response.json();
+  
+      if (data.nonMedicalResponse) {
+        const newAssistantMessage: Message = { role: "assistant", content: data.nonMedicalResponse, id: generateId() };
+        setMessages([...messages, newUserMessage, newAssistantMessage]);
       } else {
         originalHandleSubmit(e);
       }
     } catch (error) {
       console.error("Error in chat:", error);
-      const errorMessage = error instanceof Error ? error.message : String(error);
-      const newErrorMessage: Message = { 
-        role: "assistant", 
-        content: `An error occurred: ${errorMessage}. Please try again.`, 
-        id: generateId() 
-      };
-      setMessages([...messages, newUserMessage, newErrorMessage]);
     }
   };
 
