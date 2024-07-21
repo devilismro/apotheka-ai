@@ -7,164 +7,39 @@ console.log("API key set!");
 export const runtime = "edge";
 
 const medicalKeywords = [
-  "medicament",
-  "tratament",
-  "boală",
-  "simptom",
-  "doctor",
-  "farmacie",
-  "supliment",
-  "sănătate",
-  "diagnostic",
-  "terapie",
-  "consultație",
-  "rețetă",
-  "vaccin",
-  "imunizare",
-  "antibiotic",
-  "analgezic",
-  "antiinflamator",
-  "antiseptic",
-  "antihistaminic",
-  "anestezie",
-  "chirurgie",
-  "oncologie",
-  "radiografie",
-  "ecografie",
-  "tomografie",
-  "RMN",
-  "dializă",
-  "transplant",
-  "cardiologie",
-  "neurologie",
-  "dermatologie",
-  "oftalmologie",
-  "gastroenterologie",
-  "endocrinologie",
-  "psihiatrie",
-  "psihologie",
-  "pediatrie",
-  "geriatrie",
-  "ginecologie",
-  "obstetrică",
-  "urologie",
-  "nefrologie",
-  "hepatologie",
-  "pneumologie",
-  "reumatologie",
-  "hematologie",
-  "infecție",
-  "virus",
-  "bacterie",
-  "fung",
-  "parazit",
-  "epidemie",
-  "pandemie",
-  "alergie",
-  "intoleranță",
-  "gluten",
-  "lactoză",
-  "nutriție",
-  "dietă",
-  "metabolism",
-  "vitamină",
-  "minerale",
-  "probiotice",
-  "enzime",
-  "hidroterapie",
-  "fizioterapie",
-  "kinetoterapie",
-  "acupunctură",
-  "homeopatie",
-  "fitoterapie",
-  "aromaterapie",
-  "masaj",
-  "relaxare",
-  "hipertensiune",
-  "diabet",
-  "colesterol",
-  "trigliceride",
-  "anemie",
-  "leucemie",
-  "trombocite",
-  "plasmă",
-  "insulină",
-  "glucoză",
-  "glucagon",
-  "hormon",
-  "testosteron",
-  "estrogen",
-  "progesteron",
-  "tiroidă",
-  "adrenalină",
-  "cortizol",
-  "serotonină",
-  "dopamină",
-  "imunitate",
-  "autoimun",
-  "inflamație",
-  "artrită",
-  "astm",
-  "bronșită",
-  "pneumonie",
-  "sinuzită",
-  "alzheimer",
-  "parkinson",
-  "epilepsie",
-  "scleroză",
-  "tumoră",
-  "cancer",
-  "metastază",
-  "biopsie",
-  "citostatice",
-  "imunoterapie",
-  "radioterapie",
-  "chemoterapie",
-  "rehabilitare",
-  "recuperare",
-  "plagă",
-  "fractură",
-  "luxație",
-  "entorsă",
-  "contuzie",
-  "hemoragie",
-  "coagulare",
-  "transfuzie",
-  "venă",
-  "arteră",
-  "capilar",
-  "anestezic",
-  "analgezic",
-  "sedativ",
-  "hipnotic",
-  "tranchilizant",
-  "antidepresiv",
-  "antiepileptic",
-  "antipsihotic",
-  "antipiretic",
-  "laxativ",
-  "antidiabetic",
-  "antifungic",
-  "antiviral",
-  "anticorpi",
-  "imunoglobulină",
-  "ser",
-  "vaccinare",
-  "profilaxie",
-  "igienă",
-  "sterilizare",
-  "dezinfecție",
-  "buna",
-  "buna ziua",
-  "ziua buna",
-  "salut",
-  "salutare",
+  "medicament", "tratament", "boală", "simptom", "doctor", "farmacie", 
+  "supliment", "sănătate", "diagnostic", "terapie", "consultație", "rețetă",
+  "vaccin", "imunizare", "antibiotic", "analgezic", "antiinflamator",
+  "antiseptic", "antihistaminic", "anestezie", "chirurgie", "oncologie",
+  "radiografie", "ecografie", "tomografie", "RMN", "dializă", "transplant",
+  "cardiologie", "neurologie", "dermatologie", "oftalmologie", "gastroenterologie",
+  "endocrinologie", "psihiatrie", "psihologie", "pediatrie", "geriatrie",
+  "ginecologie", "obstetrică", "urologie", "nefrologie", "hepatologie",
+  "pneumologie", "reumatologie", "hematologie", "infecție", "virus", 
+  "bacterie", "fung", "parazit", "epidemie", "pandemie", "alergie", 
+  "intoleranță", "gluten", "lactoză", "nutriție", "dietă", "metabolism", 
+  "vitamină", "minerale", "probiotice", "enzime", "hidroterapie", 
+  "fizioterapie", "kinetoterapie", "acupunctură", "homeopatie", 
+  "fitoterapie", "aromaterapie", "masaj", "relaxare", "hipertensiune", 
+  "diabet", "colesterol", "trigliceride", "anemie", "leucemie", 
+  "trombocite", "plasmă", "insulină", "glucoză", "glucagon", 
+  "hormon", "testosteron", "estrogen", "progesteron", "tiroidă", 
+  "adrenalină", "cortizol", "serotonină", "dopamină", "imunitate", 
+  "autoimun", "inflamație", "artrită", "astm", "bronșită", "pneumonie", 
+  "sinuzită", "alzheimer", "parkinson", "epilepsie", "scleroză", 
+  "tumoră", "cancer", "metastază", "biopsie", "citostatice", 
+  "imunoterapie", "radioterapie", "chemoterapie", "rehabilitare", 
+  "recuperare", "plagă", "fractură", "luxație", "entorsă", "contuzie", 
+  "hemoragie", "coagulare", "transfuzie", "venă", "arteră", 
+  "capilar", "anestezic", "analgezic", "sedativ", "hipnotic", 
+  "tranchilizant", "antidepresiv", "antiepileptic", "antipsihotic", 
+  "antipiretic", "laxativ", "antidiabetic", "antifungic", 
+  "antiviral", "anticorpi", "imunoglobulină", "ser", 
+  "vaccinare", "profilaxie", "igienă", "sterilizare", "dezinfecție", "buna", "buna ziua", "ziua buna", "salut", "salutare", 
 ];
 
 const isMedicalQuery = (query) => {
-  return medicalKeywords.some((keyword) =>
-    query.toLowerCase().includes(keyword)
-  );
+  return medicalKeywords.some((keyword) => query.toLowerCase().includes(keyword));
 };
 
 export async function POST(req) {
@@ -190,19 +65,28 @@ export async function POST(req) {
     const userMessage = messages[messages.length - 1].content;
 
     if (!isMedicalQuery(userMessage)) {
-      console.log("Non-medical query detected");
-      return new Response(
-        JSON.stringify({
-          nonMedicalResponse: "Imi pare rau, dar sunt asistent virtual care nu are alte cunostinte decat medicale. Va rog sa-mi adresati strict doar intrebari din domeniul medical sau farmaceutic. Multumesc!"
-        }),
-        {
-          status: 200,
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-    }
+      const nonMedicalResponse = {
+        role: "assistant",
+        content: "Imi pare rau, dar sunt asistent virtual care nu are alte cunostinte decat medicale. Va rog sa-mi adresati strict doar intrebari din domeniul medical sau farmaceutic. Multumesc!",
+      };
 
-    console.log("Medical query detected, sending to OpenAI");
+      const mockResponse = {
+        data: new ReadableStream({
+          start(controller) {
+            controller.enqueue(new TextEncoder().encode(JSON.stringify({
+              choices: [{ delta: { content: nonMedicalResponse.content } }]
+            }) + '\n'));
+            controller.close();
+          }
+        }),
+        status: 200,
+        statusText: 'OK',
+        headers: new Headers({ 'Content-Type': 'application/json' }),
+      };
+
+      const stream = OpenAIStream(mockResponse);
+      return new StreamingTextResponse(stream);
+    }
 
 
     const response = await openai.createChatCompletion({
@@ -255,17 +139,8 @@ export async function POST(req) {
       ],
     });
 
-    console.log("Received response from OpenAI");
-
-    if (!response.ok) {
-      const errorBody = await response.text();
-      console.error("OpenAI API error:", response.status, errorBody);
-      throw new Error(`OpenAI API error: ${response.status} ${errorBody}`);
-    }
-
     const stream = OpenAIStream(response);
 
-    console.log("Returning streaming response");
     return new StreamingTextResponse(stream);
   } catch (error) {
     console.error("Error in chat route:", error);
