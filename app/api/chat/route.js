@@ -190,6 +190,7 @@ export async function POST(req) {
     const userMessage = messages[messages.length - 1].content;
 
     if (!isMedicalQuery(userMessage)) {
+      console.log("Non-medical query detected");
       return new Response(
         JSON.stringify({
           nonMedicalResponse: "Imi pare rau, dar sunt asistent virtual care nu are alte cunostinte decat medicale. Va rog sa-mi adresati strict doar intrebari din domeniul medical sau farmaceutic. Multumesc!"
@@ -200,6 +201,8 @@ export async function POST(req) {
         }
       );
     }
+
+    console.log("Medical query detected, sending to OpenAI");
 
 
     const response = await openai.createChatCompletion({
@@ -252,8 +255,17 @@ export async function POST(req) {
       ],
     });
 
+    console.log("Received response from OpenAI");
+
+    if (!response.ok) {
+      const errorBody = await response.text();
+      console.error("OpenAI API error:", response.status, errorBody);
+      throw new Error(`OpenAI API error: ${response.status} ${errorBody}`);
+    }
+
     const stream = OpenAIStream(response);
 
+    console.log("Returning streaming response");
     return new StreamingTextResponse(stream);
   } catch (error) {
     console.error("Error in chat route:", error);
