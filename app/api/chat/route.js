@@ -16,7 +16,7 @@ export async function POST(req) {
       {
         status: 500,
         headers: { "Content-Type": "application/json" },
-      } 
+      }
     );
   }
 
@@ -29,7 +29,7 @@ export async function POST(req) {
     const { messages } = await req.json();
 
     const response = await openai.createChatCompletion({
-      model: "gpt-3.5-turbo",
+      model: "gpt-4o",
       stream: true,
       messages: [
         {
