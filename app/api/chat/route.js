@@ -70,10 +70,10 @@ export async function POST(req) {
         content: "Imi pare rau, dar sunt asistent virtual care nu are alte cunostinte decat medicale. Va rog sa-mi adresati strict doar intrebari din domeniul medical sau farmaceutic. Multumesc!",
       };
 
-      messages.push(nonMedicalResponse);
+      const updatedMessages = [...messages, nonMedicalResponse];
 
       return new Response(
-        JSON.stringify({ messages }),
+        JSON.stringify({ messages: updatedMessages }),
         {
           status: 200,
           headers: { "Content-Type": "application/json" },
