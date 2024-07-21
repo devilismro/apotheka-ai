@@ -1,8 +1,9 @@
 import { Configuration, OpenAIApi } from "openai-edge";
 import { OpenAIStream, StreamingTextResponse } from "ai";
+require('dotenv').config();
 
-const OPENAI_API_KEY =
-  "sk-proj-x5jirDE6Cr5leSul4INZT3BlbkFJ7kbjIiJrCJeUaxc0jc6N";
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+
 console.log("API key set!");
 export const runtime = "edge";
 
@@ -28,7 +29,7 @@ export async function POST(req) {
     const { messages } = await req.json();
 
     const response = await openai.createChatCompletion({
-      model: "gpt-3.5-turbo",
+      model: "gpt-4o",
       stream: true,
       messages: [
         {
