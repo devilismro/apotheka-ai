@@ -70,10 +70,15 @@ export async function POST(req) {
         content: "Imi pare rau, dar sunt asistent virtual care nu are alte cunostinte decat medicale. Va rog sa-mi adresati strict doar intrebari din domeniul medical sau farmaceutic. Multumesc!",
       };
 
-      return new Response(JSON.stringify({ messages: [...messages, nonMedicalResponse] }), {
-        status: 200,
-        headers: { "Content-Type": "application/json" },
-      });
+      messages.push(nonMedicalResponse);
+
+      return new Response(
+        JSON.stringify({ messages }),
+        {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
     }
 
     const response = await openai.createChatCompletion({
