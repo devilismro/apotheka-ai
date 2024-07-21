@@ -52,14 +52,14 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => (
 );
 
 const ApothekaAIAssistant: React.FC = () => {
-  const router = useRouter(); 
+  const router = useRouter();
   const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
 
   const {
     messages,
     input,
     handleInputChange,
-    handleSubmit,
+    handleSubmit: originalHandleSubmit,
     setMessages,
     error,
   } = useChat({
@@ -76,6 +76,43 @@ const ApothekaAIAssistant: React.FC = () => {
       console.error("Chat error:", error);
     },
   });
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const userMessage = input.trim();
+  
+    if (!userMessage) return;
+  
+    const newUserMessage: Message = { role: "user", content: userMessage, id: generateId() };
+    setMessages([...messages, newUserMessage]);
+  
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          messages: [...messages, newUserMessage],
+        }),
+      });
+  
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+  
+      const data = await response.json();
+  
+      if (data.nonMedicalResponse) {
+        const newAssistantMessage: Message = { role: "assistant", content: data.nonMedicalResponse, id: generateId() };
+        setMessages([...messages, newUserMessage, newAssistantMessage]);
+      } else {
+        originalHandleSubmit(e);
+      }
+    } catch (error) {
+      console.error("Error in chat:", error);
+    }
+  };
 
   useEffect(() => {
     const savedMode = localStorage.getItem("darkMode");

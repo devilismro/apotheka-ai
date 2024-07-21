@@ -190,33 +190,17 @@ export async function POST(req) {
     const userMessage = messages[messages.length - 1].content;
 
     if (!isMedicalQuery(userMessage)) {
-      const nonMedicalResponse = {
-        role: "assistant",
-        content:
-          "Imi pare rau, dar sunt asistent virtual care nu are alte cunostinte decat medicale. Va rog sa-mi adresati strict doar intrebari din domeniul medical sau farmaceutic. Multumesc!",
-      };
-
-      const mockResponse = {
-        data: new ReadableStream({
-          start(controller) {
-            controller.enqueue(
-              new TextEncoder().encode(
-                JSON.stringify({
-                  choices: [{ delta: { content: nonMedicalResponse.content } }],
-                }) + "\n"
-              )
-            );
-            controller.close();
-          },
+      return new Response(
+        JSON.stringify({
+          nonMedicalResponse: "Imi pare rau, dar sunt asistent virtual care nu are alte cunostinte decat medicale. Va rog sa-mi adresati strict doar intrebari din domeniul medical sau farmaceutic. Multumesc!"
         }),
-        status: 200,
-        statusText: "OK",
-        headers: new Headers({ "Content-Type": "application/json" }),
-      };
-
-      const stream = OpenAIStream(mockResponse);
-      return new StreamingTextResponse(stream);
+        {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
     }
+
 
     const response = await openai.createChatCompletion({
       model: "gpt-4o",
