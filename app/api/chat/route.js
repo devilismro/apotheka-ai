@@ -1,11 +1,46 @@
 import { Configuration, OpenAIApi } from "openai-edge";
 import { OpenAIStream, StreamingTextResponse } from "ai";
 
-
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
 console.log("API key set!");
 export const runtime = "edge";
+
+const medicalKeywords = [
+  "medicament", "tratament", "boală", "simptom", "doctor", "farmacie", 
+  "supliment", "sănătate", "diagnostic", "terapie", "consultație", "rețetă",
+  "vaccin", "imunizare", "antibiotic", "analgezic", "antiinflamator",
+  "antiseptic", "antihistaminic", "anestezie", "chirurgie", "oncologie",
+  "radiografie", "ecografie", "tomografie", "RMN", "dializă", "transplant",
+  "cardiologie", "neurologie", "dermatologie", "oftalmologie", "gastroenterologie",
+  "endocrinologie", "psihiatrie", "psihologie", "pediatrie", "geriatrie",
+  "ginecologie", "obstetrică", "urologie", "nefrologie", "hepatologie",
+  "pneumologie", "reumatologie", "hematologie", "infecție", "virus", 
+  "bacterie", "fung", "parazit", "epidemie", "pandemie", "alergie", 
+  "intoleranță", "gluten", "lactoză", "nutriție", "dietă", "metabolism", 
+  "vitamină", "minerale", "probiotice", "enzime", "hidroterapie", 
+  "fizioterapie", "kinetoterapie", "acupunctură", "homeopatie", 
+  "fitoterapie", "aromaterapie", "masaj", "relaxare", "hipertensiune", 
+  "diabet", "colesterol", "trigliceride", "anemie", "leucemie", 
+  "trombocite", "plasmă", "insulină", "glucoză", "glucagon", 
+  "hormon", "testosteron", "estrogen", "progesteron", "tiroidă", 
+  "adrenalină", "cortizol", "serotonină", "dopamină", "imunitate", 
+  "autoimun", "inflamație", "artrită", "astm", "bronșită", "pneumonie", 
+  "sinuzită", "alzheimer", "parkinson", "epilepsie", "scleroză", 
+  "tumoră", "cancer", "metastază", "biopsie", "citostatice", 
+  "imunoterapie", "radioterapie", "chemoterapie", "rehabilitare", 
+  "recuperare", "plagă", "fractură", "luxație", "entorsă", "contuzie", 
+  "hemoragie", "coagulare", "transfuzie", "venă", "arteră", 
+  "capilar", "anestezic", "analgezic", "sedativ", "hipnotic", 
+  "tranchilizant", "antidepresiv", "antiepileptic", "antipsihotic", 
+  "antipiretic", "laxativ", "antidiabetic", "antifungic", 
+  "antiviral", "anticorpi", "imunoglobulină", "ser", 
+  "vaccinare", "profilaxie", "igienă", "sterilizare", "dezinfecție"
+];
+
+const isMedicalQuery = (query) => {
+  return medicalKeywords.some((keyword) => query.toLowerCase().includes(keyword));
+};
 
 export async function POST(req) {
   const apiKey = OPENAI_API_KEY;
@@ -27,6 +62,22 @@ export async function POST(req) {
 
   try {
     const { messages } = await req.json();
+    const userMessage = messages[messages.length - 1].content;
+
+    if (!isMedicalQuery(userMessage)) {
+      const nonMedicalResponse = {
+        role: "assistant",
+        content: "Imi pare rau, dar sunt asistent virtual care nu are alte cunostinte decat medicale. Va rog sa-mi adresati strict doar intrebari din domeniul medical sau farmaceutic. Multumesc!",
+      };
+
+      return new Response(
+        JSON.stringify({ messages: [...messages, nonMedicalResponse] }),
+        {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+    }
 
     const response = await openai.createChatCompletion({
       model: "gpt-4o",
