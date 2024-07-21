@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
 import React, { useState, useEffect } from "react";
 import { useChat, Message } from "ai/react";
-import { useRouter } from "next/navigation"; 
+import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -17,25 +17,35 @@ import { Send, Bot, User, Sun, Moon, LogOut } from "lucide-react";
 import { generateId } from "ai";
 import ReactMarkdown from "react-markdown";
 
-
 interface ChatMessageProps {
   message: Message;
 }
 
 const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
   const isAssistant = message.role === "assistant";
+  let formattedContent = message.content;
+
+  if (isAssistant) {
+    formattedContent = formattedContent
+      .replace(/^(\d+\.)/gm, "* $1") 
+      .replace(/([A-Z][a-z]+( [A-Z][a-z]+)*) -/g, "**$1** -")
+      .replace(/(Vă mai pot ajuta cu ceva\?.*)/g, "\n\n*$1*"); 
+  }
+
   const formattedMessage = (
     <ReactMarkdown
       className={`prose dark:prose-dark ${
         isAssistant ? "text-gray-800 dark:text-white" : "text-white"
       }`}
     >
-      {message.content}
+      {formattedContent}
     </ReactMarkdown>
   );
 
   return (
-    <div className={`flex ${isAssistant ? "justify-start" : "justify-end"} mb-4`}>
+    <div
+      className={`flex ${isAssistant ? "justify-start" : "justify-end"} mb-4`}
+    >
       <div
         className={`flex items-start max-w-[100%] ${
           isAssistant ? "flex-row" : "flex-row-reverse"
@@ -63,7 +73,7 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
 };
 
 const ApothekaAIAssistant: React.FC = () => {
-  const router = useRouter(); 
+  const router = useRouter();
   const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
 
   const {
@@ -109,7 +119,7 @@ const ApothekaAIAssistant: React.FC = () => {
   };
 
   const handleLogout = () => {
-    router.push("/"); 
+    router.push("/");
   };
 
   return (
