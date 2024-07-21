@@ -6,42 +6,6 @@ const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 console.log("API key set!");
 export const runtime = "edge";
 
-const medicalKeywords = [
-  "medicament", "tratament", "boală", "simptom", "doctor", "farmacie", 
-  "supliment", "sănătate", "diagnostic", "terapie", "consultație", "rețetă",
-  "vaccin", "imunizare", "antibiotic", "analgezic", "antiinflamator",
-  "antiseptic", "antihistaminic", "anestezie", "chirurgie", "oncologie",
-  "radiografie", "ecografie", "tomografie", "RMN", "dializă", "transplant",
-  "cardiologie", "neurologie", "dermatologie", "oftalmologie", "gastroenterologie",
-  "endocrinologie", "psihiatrie", "psihologie", "pediatrie", "geriatrie",
-  "ginecologie", "obstetrică", "urologie", "nefrologie", "hepatologie",
-  "pneumologie", "reumatologie", "hematologie", "infecție", "virus", 
-  "bacterie", "fung", "parazit", "epidemie", "pandemie", "alergie", 
-  "intoleranță", "gluten", "lactoză", "nutriție", "dietă", "metabolism", 
-  "vitamină", "minerale", "probiotice", "enzime", "hidroterapie", 
-  "fizioterapie", "kinetoterapie", "acupunctură", "homeopatie", 
-  "fitoterapie", "aromaterapie", "masaj", "relaxare", "hipertensiune", 
-  "diabet", "colesterol", "trigliceride", "anemie", "leucemie", 
-  "trombocite", "plasmă", "insulină", "glucoză", "glucagon", 
-  "hormon", "testosteron", "estrogen", "progesteron", "tiroidă", 
-  "adrenalină", "cortizol", "serotonină", "dopamină", "imunitate", 
-  "autoimun", "inflamație", "artrită", "astm", "bronșită", "pneumonie", 
-  "sinuzită", "alzheimer", "parkinson", "epilepsie", "scleroză", 
-  "tumoră", "cancer", "metastază", "biopsie", "citostatice", 
-  "imunoterapie", "radioterapie", "chemoterapie", "rehabilitare", 
-  "recuperare", "plagă", "fractură", "luxație", "entorsă", "contuzie", 
-  "hemoragie", "coagulare", "transfuzie", "venă", "arteră", 
-  "capilar", "anestezic", "analgezic", "sedativ", "hipnotic", 
-  "tranchilizant", "antidepresiv", "antiepileptic", "antipsihotic", 
-  "antipiretic", "laxativ", "antidiabetic", "antifungic", 
-  "antiviral", "anticorpi", "imunoglobulină", "ser", 
-  "vaccinare", "profilaxie", "igienă", "sterilizare", "dezinfecție", "buna", "buna ziua", "ziua buna", "salut", "salutare", 
-];
-
-const isMedicalQuery = (query) => {
-  return medicalKeywords.some((keyword) => query.toLowerCase().includes(keyword));
-};
-
 export async function POST(req) {
   const apiKey = OPENAI_API_KEY;
 
@@ -62,35 +26,9 @@ export async function POST(req) {
 
   try {
     const { messages } = await req.json();
-    const userMessage = messages[messages.length - 1].content;
-
-    if (!isMedicalQuery(userMessage)) {
-      const nonMedicalResponse = {
-        role: "assistant",
-        content: "Imi pare rau, dar sunt asistent virtual care nu are alte cunostinte decat medicale. Va rog sa-mi adresati strict doar intrebari din domeniul medical sau farmaceutic. Multumesc!",
-      };
-
-      const mockResponse = {
-        data: new ReadableStream({
-          start(controller) {
-            controller.enqueue(new TextEncoder().encode(JSON.stringify({
-              choices: [{ delta: { content: nonMedicalResponse.content } }]
-            }) + '\n'));
-            controller.close();
-          }
-        }),
-        status: 200,
-        statusText: 'OK',
-        headers: new Headers({ 'Content-Type': 'application/json' }),
-      };
-
-      const stream = OpenAIStream(mockResponse);
-      return new StreamingTextResponse(stream);
-    }
-
 
     const response = await openai.createChatCompletion({
-      model: "gpt-4o",
+      model: "gpt-4",
       stream: true,
       messages: [
         {
@@ -109,8 +47,9 @@ export async function POST(req) {
           
           Restricții și Focalizare:
           - Răspunzi exclusiv în limba română. Nu folosești emoticoane!
-          - Te concentrezi doar pe subiecte legate de Apotheka, produse farmaceutice, sănătate și stil de viață sănătos.
-          - Pentru orice întrebare în afara acestor domenii, explici politicos că poți ajuta doar cu informații legate de farmacie și sănătate.
+          - Te concentrezi DOAR pe subiecte legate de Apotheka, produse farmaceutice, sănătate și stil de viață sănătos.
+          - Pentru ORICE întrebare în afara acestor domenii, răspunzi STRICT cu: "Imi pare rau, dar sunt asistent virtual care nu are alte cunostinte decat medicale. Va rog sa-mi adresati strict doar intrebari din domeniul medical sau farmaceutic. Multumesc!"
+          - Nu răspunde NICIODATĂ - dar absolut NICIODATA - la întrebări care nu sunt legate de domeniul medical sau farmaceutic.
           
           Sfaturi Personalizate și Recomandări de Medicamente:
           - Oferă sfaturi personalizate bazate pe informațiile de sănătate ale pacientului, dacă sunt disponibile.
@@ -140,7 +79,6 @@ export async function POST(req) {
     });
 
     const stream = OpenAIStream(response);
-
     return new StreamingTextResponse(stream);
   } catch (error) {
     console.error("Error in chat route:", error);
