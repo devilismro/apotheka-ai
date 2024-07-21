@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
 import React, { useState, useEffect } from "react";
 import { useChat, Message } from "ai/react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation"; 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -15,7 +15,6 @@ import {
 } from "@/components/ui/card";
 import { Send, Bot, User, Sun, Moon, LogOut } from "lucide-react";
 import { generateId } from "ai";
-import ReactMarkdown from "react-markdown";
 
 interface ChatMessageProps {
   message: Message;
@@ -46,22 +45,14 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => (
             : "bg-blue-500 text-white"
         }`}
       >
-        <ReactMarkdown
-          className={`prose dark:prose-dark ${
-            message.role === "assistant"
-              ? "text-gray-800 dark:text-white"
-              : "text-white"
-          }`}
-        >
-          {message.content}
-        </ReactMarkdown>
+        {message.content}
       </div>
     </div>
   </div>
 );
 
 const ApothekaAIAssistant: React.FC = () => {
-  const router = useRouter();
+  const router = useRouter(); 
   const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
 
   const {
@@ -107,7 +98,7 @@ const ApothekaAIAssistant: React.FC = () => {
   };
 
   const handleLogout = () => {
-    router.push("/");
+    router.push("/"); 
   };
 
   return (
