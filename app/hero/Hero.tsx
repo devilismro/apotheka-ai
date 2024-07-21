@@ -52,7 +52,7 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => (
 );
 
 const ApothekaAIAssistant: React.FC = () => {
-  const router = useRouter(); // Correctly using useRouter from next/navigation
+  const router = useRouter(); 
   const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
 
   const {
