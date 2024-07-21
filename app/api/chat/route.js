@@ -24,7 +24,7 @@ const medicalKeywords = [
   "diabet", "colesterol", "trigliceride", "anemie", "leucemie", 
   "trombocite", "plasmă", "insulină", "glucoză", "glucagon", 
   "hormon", "testosteron", "estrogen", "progesteron", "tiroidă", 
-  "adrenalina", "cortizol", "serotonină", "dopamină", "imunitate", 
+  "adrenalină", "cortizol", "serotonină", "dopamină", "imunitate", 
   "autoimun", "inflamație", "artrită", "astm", "bronșită", "pneumonie", 
   "sinuzită", "alzheimer", "parkinson", "epilepsie", "scleroză", 
   "tumoră", "cancer", "metastază", "biopsie", "citostatice", 
@@ -70,10 +70,8 @@ export async function POST(req) {
         content: "Imi pare rau, dar sunt asistent virtual care nu are alte cunostinte decat medicale. Va rog sa-mi adresati strict doar intrebari din domeniul medical sau farmaceutic. Multumesc!",
       };
 
-      messages.push(nonMedicalResponse);
-
       return new Response(
-        JSON.stringify({ messages }),
+        JSON.stringify({ messages: [...messages, nonMedicalResponse] }),
         {
           status: 200,
           headers: { "Content-Type": "application/json" },
